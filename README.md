@@ -43,3 +43,24 @@ The complete pipeline — from mathematical filter design in MATLAB to synthesiz
 | **Xilinx Artix-7** | Target FPGA device (xc7k70tfbv676-1) |
 
 ---
+
+##  Filter Specifications
+
+| Parameter | Value |
+|---|---|
+| Filter Type | Low-Pass FIR |
+| Filter Order | 8 |
+| Design Method | Hamming Window |
+| Cut-off Frequency | 5 KHz |
+| Pass-band Frequency | 1.5 KHz |
+| Sampling Frequency | 8 KHz |
+| Data Width | 16-bit fixed-point (signed) |
+| Scaling Factor | 128 (2⁷) |
+
+---
+
+##  System Architecture
+
+The FIR filter is implemented using the **Direct Form structure** — the simplest and most straightforward realisation of an FIR filter:
+
+<img width="311" height="149" alt="Picture1" src="https://github.com/user-attachments/assets/538ef32c-91ed-49e8-aabc-da8bebae74da" />
