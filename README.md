@@ -74,3 +74,6 @@ The FIR filter is implemented using the **Direct Form structure** — the simple
 **Mathematical operation:**
 
 <img width="274" height="58" alt="Picture2" src="https://github.com/user-attachments/assets/1e194129-6f2b-4ba8-853c-a39623884ebf" />
+
+##  Repository Structure
+
