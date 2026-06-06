@@ -63,4 +63,5 @@ The complete pipeline — from mathematical filter design in MATLAB to synthesiz
 
 The FIR filter is implemented using the **Direct Form structure** — the simplest and most straightforward realisation of an FIR filter:
 
-<img width="311" height="149" alt="Picture1" src="https://github.com/user-attachments/assets/538ef32c-91ed-49e8-aabc-da8bebae74da" />
+<img width="508" height="178" alt="Picture3" src="https://github.com/user-attachments/assets/1ce52bd3-9ce9-4e2e-9c74-518e8b7d680a" />
+
