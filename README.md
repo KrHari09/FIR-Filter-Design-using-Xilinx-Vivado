@@ -10,3 +10,13 @@
 ![Institute](https://img.shields.io/badge/Institute-NIT%20Jamshedpur-purple?style=for-the-badge)
 
 </div>
+
+---
+
+##  Project Overview
+
+This project presents the **design and hardware implementation of an 8th-order Finite Impulse Response (FIR) Low-Pass Filter** using **Verilog HDL** synthesized on a **Xilinx Artix-7 FPGA** via Xilinx Vivado. Filter coefficients were derived using MATLAB's FDATool with the **Hamming window method**, and the design was validated through RTL simulation against MATLAB-generated reference outputs.
+
+The complete pipeline — from mathematical filter design in MATLAB to synthesized hardware on an FPGA — was built and verified end-to-end, with simulation results confirming correct noise attenuation behaviour.
+
+---
