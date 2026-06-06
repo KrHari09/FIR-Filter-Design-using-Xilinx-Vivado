@@ -13,10 +13,33 @@
 
 ---
 
-##  Project Overview
+##  Overview
 
 This project presents the **design and hardware implementation of an 8th-order Finite Impulse Response (FIR) Low-Pass Filter** using **Verilog HDL** synthesized on a **Xilinx Artix-7 FPGA** via Xilinx Vivado. Filter coefficients were derived using MATLAB's FDATool with the **Hamming window method**, and the design was validated through RTL simulation against MATLAB-generated reference outputs.
 
 The complete pipeline — from mathematical filter design in MATLAB to synthesized hardware on an FPGA — was built and verified end-to-end, with simulation results confirming correct noise attenuation behaviour.
+
+---
+
+##  Key Highlights
+
+-  **End-to-end DSP pipeline**: MATLAB coefficient design → Verilog RTL → FPGA synthesis
+-  **16-bit fixed-point** data representation for hardware-efficient arithmetic
+-  **Direct form FIR structure** implemented using D Flip-Flop shift registers for time delay
+-  **Hamming window** used for filter coefficient computation (minimised side-lobe ripple)
+-  **RTL simulation** verified against MATLAB output — confirmed signal noise attenuation
+-  Synthesis completed with **zero critical timing violations** on Xilinx Artix-7 (xc7k70tfbv676-1)
+-  Resource utilisation: **LUT ~1%, FF ~1%, IO ~9%** — highly efficient design
+
+---
+
+##  Tech Stack
+
+| Tool / Technology | Purpose |
+|---|---|
+| **Verilog HDL** | RTL design of FIR filter and D Flip-Flop modules |
+| **Xilinx Vivado** | Synthesis, elaboration, simulation and device utilisation |
+| **MATLAB 2018b** | Filter coefficient design (FDATool), test signal generation |
+| **Xilinx Artix-7** | Target FPGA device (xc7k70tfbv676-1) |
 
 ---
