@@ -63,5 +63,14 @@ The complete pipeline — from mathematical filter design in MATLAB to synthesiz
 
 The FIR filter is implemented using the **Direct Form structure** — the simplest and most straightforward realisation of an FIR filter:
 
-<img width="508" height="178" alt="Picture3" src="https://github.com/user-attachments/assets/1ce52bd3-9ce9-4e2e-9c74-518e8b7d680a" />
+<img width="549" height="289" alt="ch007-f001" src="https://github.com/user-attachments/assets/ba8f7e74-e51c-4e25-aaa5-f30e352c8ca5" />
 
+
+**Building blocks used:**
+- `D Flip-Flop (DFF)` modules — create unit time delays (z⁻¹ blocks)
+- Fixed-point multipliers — scale input samples by filter coefficients
+- Fixed-point adders — accumulate the weighted products
+
+**Mathematical operation:**
+
+<img width="274" height="58" alt="Picture2" src="https://github.com/user-attachments/assets/1e194129-6f2b-4ba8-853c-a39623884ebf" />
