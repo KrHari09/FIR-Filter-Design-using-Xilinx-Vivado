@@ -1,50 +1,24 @@
- # FIR Filter Design & Implementation
-### Digital Signal Processing on FPGA using Verilog HDL & Xilinx Vivado
+# FIR Filter Design & Implementation on FPGA
 
 <div align="center">
 
-![FPGA](https://img.shields.io/badge/Platform-FPGA%20%7C%20Xilinx%20Artix--7-blue?style=for-the-badge&logo=xilinx)
-![Verilog](https://img.shields.io/badge/Language-Verilog%20HDL-orange?style=for-the-badge)
-![MATLAB](https://img.shields.io/badge/Tool-MATLAB%202018b-red?style=for-the-badge)
+![FPGA](https://img.shields.io/badge/Platform-FPGA%20%7C%20Xilinx%20Artix--7-blue?style=for-the-badge)
+![Language](https://img.shields.io/badge/Language-Verilog%20HDL-orange?style=for-the-badge)
+![Tool](https://img.shields.io/badge/Tool-Xilinx%20Vivado-red?style=for-the-badge)
+![MATLAB](https://img.shields.io/badge/Tool-MATLAB%202018b-yellow?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Completed-brightgreen?style=for-the-badge)
-![Institute](https://img.shields.io/badge/Institute-NIT%20Jamshedpur-purple?style=for-the-badge)
 
 </div>
 
 ---
 
-##  Overview
+An **8th-order Finite Impulse Response (FIR) Low-Pass Filter** designed and implemented in **Verilog HDL**, synthesized on a **Xilinx Artix-7 FPGA** using Xilinx Vivado. Filter coefficients were computed in MATLAB using the **Hamming window method** and the design was verified through RTL simulation — confirming correct noise attenuation on a 16-bit fixed-point signal.
 
-This project presents the **design and hardware implementation of an 8th-order Finite Impulse Response (FIR) Low-Pass Filter** using **Verilog HDL** synthesized on a **Xilinx Artix-7 FPGA** via Xilinx Vivado. Filter coefficients were derived using MATLAB's FDATool with the **Hamming window method**, and the design was validated through RTL simulation against MATLAB-generated reference outputs.
-
-The complete pipeline — from mathematical filter design in MATLAB to synthesized hardware on an FPGA — was built and verified end-to-end, with simulation results confirming correct noise attenuation behaviour.
+The complete flow — MATLAB coefficient design → Verilog RTL → FPGA synthesis — was built and validated end-to-end with zero critical timing violations.
 
 ---
 
-##  Key Highlights
-
--  **End-to-end DSP pipeline**: MATLAB coefficient design → Verilog RTL → FPGA synthesis
--  **16-bit fixed-point** data representation for hardware-efficient arithmetic
--  **Direct form FIR structure** implemented using D Flip-Flop shift registers for time delay
--  **Hamming window** used for filter coefficient computation (minimised side-lobe ripple)
--  **RTL simulation** verified against MATLAB output — confirmed signal noise attenuation
--  Synthesis completed with **zero critical timing violations** on Xilinx Artix-7 (xc7k70tfbv676-1)
--  Resource utilisation: **LUT ~1%, FF ~1%, IO ~9%** — highly efficient design
-
----
-
-##  Tech Stack
-
-| Tool / Technology | Purpose |
-|---|---|
-| **Verilog HDL** | RTL design of FIR filter and D Flip-Flop modules |
-| **Xilinx Vivado** | Synthesis, elaboration, simulation and device utilisation |
-| **MATLAB 2018b** | Filter coefficient design (FDATool), test signal generation |
-| **Xilinx Artix-7** | Target FPGA device (xc7k70tfbv676-1) |
-
----
-
-##  Filter Specifications
+## Filter Specifications
 
 | Parameter | Value |
 |---|---|
@@ -54,57 +28,126 @@ The complete pipeline — from mathematical filter design in MATLAB to synthesiz
 | Cut-off Frequency | 5 KHz |
 | Pass-band Frequency | 1.5 KHz |
 | Sampling Frequency | 8 KHz |
-| Data Width | 16-bit fixed-point (signed) |
-| Scaling Factor | 128 (2⁷) |
+| Data Width | 16-bit signed fixed-point |
+| Coefficient Scaling | 128 (2⁷) |
 
 ---
 
-##  System Architecture
+## Architecture
 
-The FIR filter is implemented using the **Direct Form structure** — the simplest and most straightforward realisation of an FIR filter:
+The filter uses the **Direct Form structure** — input passes through a chain of D Flip-Flop delay elements (z⁻¹), each delayed sample is multiplied by its corresponding Hamming window coefficient, and all products are summed to produce the output.
 
-<img width="549" height="289" alt="ch007-f001" src="https://github.com/user-attachments/assets/ba8f7e74-e51c-4e25-aaa5-f30e352c8ca5" />
-
-
-**Building blocks used:**
-- `D Flip-Flop (DFF)` modules — create unit time delays (z⁻¹ blocks)
-- Fixed-point multipliers — scale input samples by filter coefficients
-- Fixed-point adders — accumulate the weighted products
-
-**Mathematical operation:**
-
-<img width="274" height="58" alt="Picture2" src="https://github.com/user-attachments/assets/1e194129-6f2b-4ba8-853c-a39623884ebf" />
-
-##  How It Works
-
-### Step 1 — Filter Coefficient Design (MATLAB)
-Filter coefficients (b₀–b₈) are computed in MATLAB using the **FDATool** with the Hamming window method. The coefficients are scaled by a factor of 128 (2⁷) to enable efficient fixed-point multiplication in hardware.
-
-### Step 2 — Input Signal Generation (MATLAB)
-A sine wave is generated at 1 Hz sampling frequency and corrupted with random noise. The noisy signal is normalised, scaled to 16-bit integers, and converted to binary — producing a `signal.data` file read by the testbench.
-
-### Step 3 — Verilog RTL Design
-The `fir_filter` module instantiates 8 `DFF` (D Flip-Flop) modules to create a shift register, producing time-delayed versions x[n-1] through x[n-8]. Each delayed sample is multiplied by its corresponding coefficient, and all products are summed to form y[n].
-
-```verilog
-// Coefficient definition (scaled by 128)
-wire [5:0] b0 = 6'b000000;
-wire [5:0] b1 = 6'b000001;
-// ...
-
-// Time delay chain using D Flip-Flops
-DFF DFF0(clk, 0, data_in, x1);   // x[n-1]
-DFF DFF1(clk, 0, x1, x2);        // x[n-2]
-// ...
-
-// Multiply-accumulate
-assign Mul1 = data_in * b1;
-// ...
-assign Add_final = Mul0 + Mul1 + Mul2 + ... + Mul8;
-always @(posedge clk) data_out <= Add_final;
+```
+x[n] ──► [z⁻¹] ──► [z⁻¹] ──► [z⁻¹] ──► ... ──► [z⁻¹]
+           │           │           │                  │
+          ×b₁         ×b₂         ×b₃               ×b₈
+           │           │           │                  │
+           └───────────┴───────────┴──── Σ ───────────┘──► y[n]
 ```
 
-### Step 4 — Testbench & Simulation
-The testbench reads the 32-sample binary signal from `signal.data` into RAM and feeds it clock-synchronously to the filter. The RTL simulation in Vivado confirms the output waveform closely follows the noise-free sine wave.
+**y[n] = b₀·x[n] + b₁·x[n-1] + b₂·x[n-2] + ... + b₈·x[n-8]**
+
+Coefficients (scaled by 128): `[0, 1, 7, 15, 19, 15, 7, 1, 0]`
 
 ---
+
+## Repository Structure
+
+```
+FIR-Filter-Design-using-Xilinx-Vivado/
+│
+├── src/
+│   ├── fir_filter.v        # Main FIR filter RTL module
+│   └── dff.v               # D Flip-Flop module (z⁻¹ delay element)
+│
+├── sim/
+│   ├── tb_fir_filter.v     # Testbench — reads signal.data, drives DUT
+│   └── signal.data         # 32-sample binary input signal (from MATLAB)
+│
+├── matlab/
+│   └── signal_gen.m        # MATLAB: sine + noise generation → signal.data
+│
+└── README.md
+```
+
+---
+
+## Key Results
+
+- ✅ RTL simulation confirmed correct noise attenuation — filtered output closely matches the clean sine wave
+- ✅ Design synthesized on Xilinx Artix-7 with **zero critical timing violations**
+- ✅ Resource utilisation: **LUT ~1%, FF ~1%, IO ~9%** — highly area-efficient
+
+### Device Utilisation Summary (Post-Synthesis)
+
+| Resource | Utilisation |
+|---|---|
+| LUT | ~1% |
+| Flip-Flops | ~1% |
+| IO | ~9% |
+| BUFG | ~3% |
+
+---
+
+## Tools Used
+
+| Tool | Purpose |
+|---|---|
+| **Verilog HDL** | RTL design of FIR filter and DFF modules |
+| **Xilinx Vivado** | Synthesis, simulation, device utilisation |
+| **MATLAB 2018b** | Coefficient design (FDATool), test signal generation |
+| **Xilinx Artix-7** | Target FPGA (xc7k70tfbv676-1) |
+
+---
+
+## How to Run
+
+### Prerequisites
+- Xilinx Vivado 2018 or later
+- MATLAB 2018b or later
+
+### Step 1 — Generate Input Signal (MATLAB)
+```matlab
+% Run in MATLAB — generates signal.data in current directory
+run('matlab/signal_gen.m')
+```
+Copy the generated `signal.data` into the `sim/` folder.
+
+### Step 2 — Set Up Vivado Project
+1. Create a new RTL project in Vivado
+2. Add `src/fir_filter.v` and `src/dff.v` as **design sources**
+3. Add `sim/tb_fir_filter.v` as **simulation source**
+4. Copy `sim/signal.data` into the Vivado simulation working directory
+
+### Step 3 — Run Simulation
+- Set `tb_fir_filter` as the top simulation module
+- Run **Behavioral Simulation**
+- Observe `data_in` (noisy) vs `data_out` (filtered) in the waveform viewer
+
+### Step 4 — Synthesize
+- Target: `xc7k70tfbv676-1`
+- Run **Synthesis** → check utilisation summary
+
+---
+
+## References
+
+1. Jagadale et al., *"Implementation of FIR Filter using VHDL"*, IJERT ICONET 2014
+2. Xiaoyan Jiang and Yujun Bao, *"FIR filter design based on FPGA"*, ICCASM 2010, doi: [10.1109/ICCASM.2010.5622482](https://doi.org/10.1109/ICCASM.2010.5622482)
+3. M. B. Trimale and Chilveri, *"A review: FIR filter implementation"*, IEEE RTEICT 2017, doi: [10.1109/RTEICT.2017.8256573](https://doi.org/10.1109/RTEICT.2017.8256573)
+
+---
+
+## Author
+
+**Hari Kumar** (2022UGEC018)
+B.Tech (Hons.) — Electronics & Communication Engineering
+National Institute of Technology Jamshedpur
+
+**Supervisor:** Dr. Basanta Bhowmik, Assistant Professor, Dept. of ECE, NIT Jamshedpur
+
+---
+
+<div align="center">
+<i>If you found this helpful, consider giving it a ⭐</i>
+</div>
