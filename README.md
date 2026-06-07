@@ -75,5 +75,36 @@ The FIR filter is implemented using the **Direct Form structure** — the simple
 
 <img width="274" height="58" alt="Picture2" src="https://github.com/user-attachments/assets/1e194129-6f2b-4ba8-853c-a39623884ebf" />
 
-##  Repository Structure
+##  How It Works
 
+### Step 1 — Filter Coefficient Design (MATLAB)
+Filter coefficients (b₀–b₈) are computed in MATLAB using the **FDATool** with the Hamming window method. The coefficients are scaled by a factor of 128 (2⁷) to enable efficient fixed-point multiplication in hardware.
+
+### Step 2 — Input Signal Generation (MATLAB)
+A sine wave is generated at 1 Hz sampling frequency and corrupted with random noise. The noisy signal is normalised, scaled to 16-bit integers, and converted to binary — producing a `signal.data` file read by the testbench.
+
+### Step 3 — Verilog RTL Design
+The `fir_filter` module instantiates 8 `DFF` (D Flip-Flop) modules to create a shift register, producing time-delayed versions x[n-1] through x[n-8]. Each delayed sample is multiplied by its corresponding coefficient, and all products are summed to form y[n].
+
+```verilog
+// Coefficient definition (scaled by 128)
+wire [5:0] b0 = 6'b000000;
+wire [5:0] b1 = 6'b000001;
+// ...
+
+// Time delay chain using D Flip-Flops
+DFF DFF0(clk, 0, data_in, x1);   // x[n-1]
+DFF DFF1(clk, 0, x1, x2);        // x[n-2]
+// ...
+
+// Multiply-accumulate
+assign Mul1 = data_in * b1;
+// ...
+assign Add_final = Mul0 + Mul1 + Mul2 + ... + Mul8;
+always @(posedge clk) data_out <= Add_final;
+```
+
+### Step 4 — Testbench & Simulation
+The testbench reads the 32-sample binary signal from `signal.data` into RAM and feeds it clock-synchronously to the filter. The RTL simulation in Vivado confirms the output waveform closely follows the noise-free sine wave.
+
+---
