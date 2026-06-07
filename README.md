@@ -50,26 +50,6 @@ Coefficients (scaled by 128): `[0, 1, 7, 15, 19, 15, 7, 1, 0]`
 
 <img width="1366" height="830" alt="image" src="https://github.com/user-attachments/assets/9f5d6586-8852-41a1-96a0-0abbe4520bc2" />
 
-
----
-
-## Key Results
-
--  RTL simulation confirmed correct noise attenuation — filtered output closely matches the clean sine wave
--  Design synthesized on Xilinx Artix-7 with **zero critical timing violations**
--  Resource utilisation: **LUT ~1%, FF ~1%, IO ~9%** — highly area-efficient
-
-### Device Utilisation Summary (Post-Synthesis)
-<img width="624" height="323" alt="Device_utilization summary" src="https://github.com/user-attachments/assets/1a9f4f0e-3887-49e8-8f73-0c549fd685a8" />
-
-
-| Resource | Utilisation |
-|---|---|
-| LUT | ~1% |
-| Flip-Flops | ~1% |
-| IO | ~9% |
-| BUFG | ~3% |
-
 ---
 
 ## Tools Used
@@ -112,6 +92,42 @@ Copy the generated `signal.data` into the `sim/` folder.
 - Run **Synthesis** → check utilisation summary
 
 ---
+
+## MATLAB generated signal
+
+<img width="785" height="415" alt="Sine wave generated in MATLAB after addition of noise" src="https://github.com/user-attachments/assets/89af9f80-51b1-4070-aba4-59880a267280" />
+
+---
+
+## Circuit Daigram
+
+<img width="785" height="431" alt="Circuit diagram to implement FIR Filter" src="https://github.com/user-attachments/assets/2732dafc-377d-480f-8d32-2ac76f94f8e1" />
+
+
+---
+
+### Device Utilisation Summary (Post-Synthesis)
+
+<img width="785" height="323" alt="Device_utilization summary" src="https://github.com/user-attachments/assets/1a9f4f0e-3887-49e8-8f73-0c549fd685a8" />
+
+| Resource | Utilisation |
+|---|---|
+| LUT | ~1% |
+| Flip-Flops | ~1% |
+| IO | ~9% |
+| BUFG | ~3% |
+
+---
+
+## Key Results
+
+<img width="785" height="282" alt="Result" src="https://github.com/user-attachments/assets/6606c543-ce84-45bb-831c-89e9525b393d" />
+
+-  RTL simulation confirmed correct noise attenuation — filtered output closely matches the clean sine wave
+-  Design synthesized on Xilinx Artix-7 with **zero critical timing violations**
+-  Resource utilisation: **LUT ~1%, FF ~1%, IO ~9%** — highly area-efficient
+
+
 
 ## References
 
