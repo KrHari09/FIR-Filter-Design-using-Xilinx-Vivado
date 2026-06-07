@@ -141,7 +141,8 @@ Copy the generated `signal.data` into the `sim/` folder.
 
 **Hari Kumar** (2022UGEC018)
 B.Tech (Hons.) — Electronics & Communication Engineering,
-National Institute of Technology Jamshedpur
+National Institute of Technology Jamshedpur; 
+harikumaroct2001@gmail.com
 
 **Supervisor:** Dr. Basanta Bhowmik, Assistant Professor, Dept. of ECE, NIT Jamshedpur
 
