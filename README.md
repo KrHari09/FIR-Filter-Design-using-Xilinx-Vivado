@@ -37,13 +37,8 @@ The complete flow — MATLAB coefficient design → Verilog RTL → FPGA synthes
 
 The filter uses the **Direct Form structure** — input passes through a chain of D Flip-Flop delay elements (z⁻¹), each delayed sample is multiplied by its corresponding Hamming window coefficient, and all products are summed to produce the output.
 
-```
-x[n] ──► [z⁻¹] ──► [z⁻¹] ──► [z⁻¹] ──► ... ──► [z⁻¹]
-           │           │           │                  │
-          ×b₁         ×b₂         ×b₃               ×b₈
-           │           │           │                  │
-           └───────────┴───────────┴──── Σ ───────────┘──► y[n]
-```
+<img width="1366" height="840" alt="image" src="https://github.com/user-attachments/assets/b3782d05-1113-4544-9083-74cf049cc5c7" />
+
 
 **y[n] = b₀·x[n] + b₁·x[n-1] + b₂·x[n-2] + ... + b₈·x[n-8]**
 
@@ -53,32 +48,20 @@ Coefficients (scaled by 128): `[0, 1, 7, 15, 19, 15, 7, 1, 0]`
 
 ## Repository Structure
 
-```
-FIR-Filter-Design-using-Xilinx-Vivado/
-│
-├── src/
-│   ├── fir_filter.v        # Main FIR filter RTL module
-│   └── dff.v               # D Flip-Flop module (z⁻¹ delay element)
-│
-├── sim/
-│   ├── tb_fir_filter.v     # Testbench — reads signal.data, drives DUT
-│   └── signal.data         # 32-sample binary input signal (from MATLAB)
-│
-├── matlab/
-│   └── signal_gen.m        # MATLAB: sine + noise generation → signal.data
-│
-└── README.md
-```
+<img width="1366" height="830" alt="image" src="https://github.com/user-attachments/assets/9f5d6586-8852-41a1-96a0-0abbe4520bc2" />
+
 
 ---
 
 ## Key Results
 
-- ✅ RTL simulation confirmed correct noise attenuation — filtered output closely matches the clean sine wave
-- ✅ Design synthesized on Xilinx Artix-7 with **zero critical timing violations**
-- ✅ Resource utilisation: **LUT ~1%, FF ~1%, IO ~9%** — highly area-efficient
+-  RTL simulation confirmed correct noise attenuation — filtered output closely matches the clean sine wave
+-  Design synthesized on Xilinx Artix-7 with **zero critical timing violations**
+-  Resource utilisation: **LUT ~1%, FF ~1%, IO ~9%** — highly area-efficient
 
 ### Device Utilisation Summary (Post-Synthesis)
+<img width="624" height="323" alt="Device_utilization summary" src="https://github.com/user-attachments/assets/1a9f4f0e-3887-49e8-8f73-0c549fd685a8" />
+
 
 | Resource | Utilisation |
 |---|---|
